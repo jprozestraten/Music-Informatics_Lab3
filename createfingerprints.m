@@ -23,4 +23,4 @@ spectrogram(query,window,nOverlap,4*nWindow,Fs,'yaxis')
 [S,f,t] = spectrogram(query,window,nOverlap,4*nWindow,Fs);
 
 %% Find anchors
-% for i = 
+for i = 
