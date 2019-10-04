@@ -2,11 +2,17 @@
 root = 'queries/';
 file = 'Q1.wav';
 
-tWindow = 0.050;
-tHop = 0.010;
+% STFT settings
+tWindow = 0.050; % seconds
+tHop = 0.010;    % seconds
 
-dt = 0.1;
-nBands = 25;
+% Time-frequency box dimensions of anchors
+dt = 0.1;    % seconds
+nBands = 25; % amount of bands to divide spectrum into
+
+% Relative targetzone
+tTargetzone = [+0.100 +0.500]; % Addition-wise
+fTargetzone = [2^-0.5 2^0.5];  % Multiplication-wise
 
 %% Load query
 [query,Fs] = audioread([root,file]);
@@ -63,3 +69,23 @@ figure(1)
 hold on
 plot(tAnchors(:),fAnchors(:)*1e-3,'x','LineWidth',1)
 hold off
+
+%% Create fingerprint
+fingerprint = cell(numel(tAnchors),2);
+
+fingerprint(:,1) = num2cell(tAnchors(:));
+
+hash = zeros(1,3);
+
+% Loops through all anchors
+for i = 1:numel(tAnchors)
+    % Time and frequency range of anchors within targetzone
+    fRange = (fAnchors >= fAnchors(i)*fTargetzone(1)) & (fAnchors < fAnchors(i)*fTargetzone(2));
+    tRange = (tAnchors >= tAnchors(i)+tTargetzone(1)) & (tAnchors < tAnchors(i)+tTargetzone(2));
+    
+    % Range of anchors where both time and frequency are in targetzone
+    range = fRange & tRange;
+    
+    % 
+    
+end
