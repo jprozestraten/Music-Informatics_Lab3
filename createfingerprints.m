@@ -71,11 +71,13 @@ plot(tAnchors(:),fAnchors(:)*1e-3,'x','LineWidth',1)
 hold off
 
 %% Create fingerprint
+% Declares a cell array for the times of all anchors
+% First entries contain times, second contain lists of hashes
+% Will later be transformed to a list of hashes with times
 fingerprint = cell(numel(tAnchors),2);
 
+% Stores all times in first entries of cell array
 fingerprint(:,1) = num2cell(tAnchors(:));
-
-hash = zeros(1,3);
 
 % Loops through all anchors
 for i = 1:numel(tAnchors)
@@ -86,6 +88,15 @@ for i = 1:numel(tAnchors)
     % Range of anchors where both time and frequency are in targetzone
     range = fRange & tRange;
     
-    % 
+    fTmp = fAnchors(range);
+    tTmp = tAnchors(range);
     
+    hashes = zeros(length(fTmp),3);
+    
+    hashes(:,1) = fAnchors(i);
+    hashes(:,2) = fTmp;
+    hashes(:,3) = tTmp - tAnchors(i);
+    
+    fingerprint{i,2} = hashes;    
 end
+
