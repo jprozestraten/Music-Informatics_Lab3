@@ -88,15 +88,18 @@ for i = 1:numel(tAnchors)
     range = fRange & tRange;
     nHashes(i) = sum(range,'all');
     
+    % Time and frequency of all valid anchors
     fTmp = fAnchors(range);
     tTmp = tAnchors(range);
     
+    % Make hashes
     hashes = zeros(nHashes(i),3);
     
     hashes(:,1) = fAnchors(i);
     hashes(:,2) = fTmp;
     hashes(:,3) = tTmp - tAnchors(i);
     
+    % Store hashes in cell
     allHashes{i} = hashes;
 end
 
