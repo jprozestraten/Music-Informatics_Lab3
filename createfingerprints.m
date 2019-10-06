@@ -72,12 +72,11 @@ hold off
 
 %% Create fingerprint
 % Declares a cell array for the times of all anchors
-% First entries contain times, second contain lists of hashes
 % Will later be transformed to a list of hashes with times
-fingerprint = cell(numel(tAnchors),2);
+allHashes = cell(numel(tAnchors),1);
 
-% Stores all times in first entries of cell array
-fingerprint(:,1) = num2cell(tAnchors(:));
+% Number of hashes per anchor
+nHashes = zeros(numel(tAnchors),1);
 
 % Loops through all anchors
 for i = 1:numel(tAnchors)
@@ -87,16 +86,23 @@ for i = 1:numel(tAnchors)
     
     % Range of anchors where both time and frequency are in targetzone
     range = fRange & tRange;
+    nHashes(i) = sum(range,'all');
     
     fTmp = fAnchors(range);
     tTmp = tAnchors(range);
     
-    hashes = zeros(length(fTmp),3);
+    hashes = zeros(nHashes(i),3);
     
     hashes(:,1) = fAnchors(i);
     hashes(:,2) = fTmp;
     hashes(:,3) = tTmp - tAnchors(i);
     
-    fingerprint{i,2} = hashes;    
+    allHashes{i} = hashes;
 end
 
+% Store data in vectors/matrices
+tFingerprint = repelem(tAnchors(:),nHashes);
+hFingerprint = cell2mat(allHashes);
+
+% Clear loop variables
+clear allHashes hashes fTmp tTmp fRange tRange range
