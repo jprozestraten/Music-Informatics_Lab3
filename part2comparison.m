@@ -90,13 +90,18 @@ function [iQuery,iDocument] = comparehash(query,document)
 lenQuery = size(query,1);
 lenDocument = size(document,1);
 
+% Initialize empty vectors
 iDocument = [];
 iQuery = [];
+
+% Loop through the query hashes
 for i = 1:lenQuery
-    comp = sum(document-query(i,:),2);
-    comp = ~comp;
+    % Subtract query hash from all document hashes, and sum the elements of
+    % that result
+    comp = sum(document-query(i,:),2); % Sum along 2nd dimension to sum hash elements
+    comp = ~comp; % Returns all zeros
     
-    iDocument = [iDocument;find(comp)];
-    iQuery = [iQuery;repmat(i,[sum(comp) 1])];
+    iDocument = [iDocument;find(comp)]; % Append index vector with indices of nonzero elements
+    iQuery = [iQuery;repmat(i,[sum(comp) 1])]; % Vector becomes [iQuery;i;i;...]. Amount of i's is the amount of matches
 end
 end
