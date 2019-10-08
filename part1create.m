@@ -26,6 +26,7 @@ window = hann(nWindow,'periodic');
 
 figure(1)
 spectrogram(query,window,nOverlap,4*nWindow,Fs,'yaxis')
+    title(['STFT of ',file])
     ylim([0 5])
 
 [S,f,t] = spectrogram(query,window,nOverlap,4*nWindow,Fs);
@@ -68,6 +69,7 @@ valAnchors = 10*log10(abs(valAnchors));
 figure(1)
 hold on
 plot(tAnchors(:),fAnchors(:)*1e-3,'x','LineWidth',1)
+    title('STFT of ',file,' with anchors')
 hold off
 
 %% Create fingerprint
