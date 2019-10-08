@@ -1,35 +1,36 @@
-function [tFingerprint,hFingerprint] = createfingerprint()
-% CREATEFINGERPRINT creates fingerprint of audio
-%   Makes a matrix hFingerprint at which hashes occur and a corresponding
-%   time vector at which the hashes occur.
-%   Hashes have the form: [f_1,f_2,t_2-t_1]
+%% Set constants
+root = 'queries/';
+file = 'Q1.wav';
 
 % STFT settings
 tWindow = 0.050; % seconds
 tHop = 0.010;    % seconds
 
 % Time-frequency box dimensions of anchors
-dt = 0.1;    % seconds
+dt = 0.100;    % seconds
 nBands = 25; % amount of bands to divide spectrum into
 
 % Relative targetzone
 tTargetzone = [+0.100 +0.500]; % Addition-wise
 fTargetzone = [2^-0.5 2^0.5];  % Multiplication-wise
 
+%% Load query
+[query,Fs] = audioread([root,file]);
 
-% STFT
-% 
+%% Plot spectrogram
 nWindow = floor(tWindow*Fs);
 tOverlap = tWindow-tHop;
 nOverlap = floor(tOverlap*Fs);
 
 window = hann(nWindow,'periodic');
 
+figure(1)
+spectrogram(query,window,nOverlap,4*nWindow,Fs,'yaxis')
+    ylim([0 5])
+
 [S,f,t] = spectrogram(query,window,nOverlap,4*nWindow,Fs);
 
-
-% Find anchors
-% 
+%% Find anchors
 nIntervals = floor(t(end)/dt);
 
 % Initialize matrices
@@ -57,10 +58,19 @@ for i = 1:nBands
         valAnchors(i,j) = valMax;
     end
 end
+% Clear loop variables
+clear i j fRange tRange fTmp tTmp valMax iiMax iiF iiT
 
+% Convert values to decibel
+valAnchors = 10*log10(abs(valAnchors));
 
-% Create fingerprint
-% 
+%% Plot anchors in spectrogram
+figure(1)
+hold on
+plot(tAnchors(:),fAnchors(:)*1e-3,'x','LineWidth',1)
+hold off
+
+%% Create fingerprint
 % Declares a cell array for the times of all anchors
 % Will later be transformed to a list of hashes with times
 allHashes = cell(numel(tAnchors),1);
@@ -97,4 +107,5 @@ end
 tFingerprint = repelem(tAnchors(:),nHashes);
 hFingerprint = cell2mat(allHashes);
 
-end
+% Clear loop variables
+clear allHashes hashes fTmp tTmp fRange tRange range
