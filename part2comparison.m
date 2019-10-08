@@ -16,16 +16,16 @@ document = audioread([root,file]);
 scatter(tFingerprint(iQuery),tFingerprint(iDocument),'kx')
 
 function [iQuery,iDocument] = comparehash(query,document)
-    lenQuery = size(query,1);
-    lenDocument = size(document,1);
+lenQuery = size(query,1);
+lenDocument = size(document,1);
+
+iDocument = [];
+iQuery = [];
+for i = 1:lenQuery
+    comp = sum(document-query(i,:),2);
+    comp = ~comp;
     
-    iDocument = [];
-    iQuery = [];
-    for i = 1:lenQuery
-        comp = sum(document-query(i,:),2);
-        comp = ~comp;
-        
-        iDocument = [iDocument;find(comp)];
-        iQuery = [iQuery;repmat(i,[sum(comp) 1])];
-    end
+    iDocument = [iDocument;find(comp)];
+    iQuery = [iQuery;repmat(i,[sum(comp) 1])];
+end
 end
