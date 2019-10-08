@@ -21,8 +21,7 @@ scatter(tFingerprint(iQuery),tFingerprint(iDocument),'kx')
     title('Comparison query with itself')
     xlabel('Time in query signal (s)')
     ylabel('Time in query signal (s)')
-    xlim([0 max(tFingerprint)])
-    ylim([0 max(tFingerprint)])
+    box on
 
 %% Compare fingerprint of query with original file
 root = 'queries/';
@@ -51,8 +50,7 @@ scatter(tFingerprintQuery(iQuery),tFingerprintDocument(iDocument),'kx')
     title('Comparison query with original file')
     xlabel('Time in query signal (s)')
     ylabel('Time in document signal (s)')
-    xlim([0 max(tFingerprintQuery)])
-    ylim([0 max(tFingerprintDocument)])
+    box on
 
 %% Compare fingeprint of query with another file
 root = 'queries/';
@@ -82,8 +80,7 @@ scatter(tFingerprintQuery(iQuery),tFingerprintDocument(iDocument),'kx')
     title('Comparison query with different file')
     xlabel('Time in query signal (s)')
     ylabel('Time in document signal (s)')
-    xlim([0 max(tFingerprintQuery)])
-    ylim([0 max(tFingerprintDocument)])
+    box on
 
 %% 
 function [iQuery,iDocument] = comparehash(query,document)
